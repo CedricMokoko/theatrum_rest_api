@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.mokoko.entities.Cliente;
 import com.mokoko.exceptions.ClienteByIdNotFoundException;
+import com.mokoko.exceptions.InvalidCredentialsException;
 import com.mokoko.repositories.ClienteRepository;
 
 @Service
@@ -51,5 +52,14 @@ public class ClienteService {
 			
 		return clienteRepo.save(existingCliente);				
 	}
+	
+	// Metodi personalizzati
+	 public Cliente login(String email, Long id) {
+	        Optional<Cliente> optCliente = clienteRepo.findByEmailAndId(email, id);
+	        if (optCliente.isEmpty()) {
+	            throw new InvalidCredentialsException(); // Lancia l'eccezione se le credenziali non sono valide
+	    }
+	    return optCliente.get();
+	 }
 
 }

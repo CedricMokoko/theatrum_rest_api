@@ -1,5 +1,7 @@
 package com.mokoko.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mokoko.entities.Cliente;
@@ -9,4 +11,5 @@ import com.mokoko.entities.Cliente;
  * base per le operazioni CRUD.*/
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 	//Qui vanno definiti metodi personalizzati
+	Optional<Cliente> findByEmailAndId(String email, Long id);
 }

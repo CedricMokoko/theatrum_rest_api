@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mokoko.dto.LoginRequest;
 import com.mokoko.entities.Cliente;
 import com.mokoko.services.ClienteService;
 
@@ -32,6 +33,12 @@ public class ClienteRestController {
 	public Cliente createCliente(@RequestBody Cliente cliente) {
 		return clienteService.createCliente(cliente);
 	}
+	
+	@PostMapping("/login")
+    public ResponseEntity<Cliente> login(@RequestBody LoginRequest loginRequest) {
+        Cliente cliente = clienteService.login(loginRequest.getEmail(), loginRequest.getId());
+        return ResponseEntity.ok(cliente); // Se il servizio non lancia eccezioni, ritorna 200 OK
+    }
 	
 	@GetMapping
 	public List<Cliente> getAllClienti(){
