@@ -13,7 +13,7 @@ public class Cliente {
 	
 	@Id //per segnare quest'attributo come chiave primaria
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "COD_CLIENTE")
+	@Column(name = "id")
 	private Long id;
 	
 	@Column(name = "COGNOME", length = 20, nullable = false)
@@ -22,22 +22,22 @@ public class Cliente {
 	@Column(name = "NOME", length = 20, nullable = false)
 	private String nome;
 	
-	@Column(name = "TELEFONO", length = 14, nullable = true)
-	private String telefono;
-	
 	@Column(name = "EMAIL", length = 30, nullable = false)
 	private String email;
+	
+	@Column(name = "PASSWORD", length = 60, nullable = false)
+	private String password;
 	
 	public Cliente() {
 		super();
 	}
 
-	public Cliente(String cognome, String nome, String telefono, String email) {
+	public Cliente(String cognome, String nome, String email, String password) {
 		super();
 		this.cognome = cognome;
 		this.nome = nome;
-		this.telefono = telefono;
 		this.email = email;
+		this.password = password;
 	}
 
 	public Long getId() {
@@ -64,14 +64,6 @@ public class Cliente {
 		this.nome = nome;
 	}
 
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -79,6 +71,15 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getPassword() {
+	        return password;
+	}
+
+    public void setPassword(String password) {
+        this.password = password; 
+    }
+    
 
 	@Override
 	public String toString() {
@@ -89,14 +90,9 @@ public class Cliente {
 		builder.append(cognome);
 		builder.append(", nome=");
 		builder.append(nome);
-		builder.append(", telefono=");
-		builder.append(telefono);
 		builder.append(", email=");
 		builder.append(email);
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
-
 }

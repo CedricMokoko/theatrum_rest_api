@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mokoko.dto.ClienteDTO;
+import com.mokoko.dto.RegisterDTO;
 import com.mokoko.entities.Cliente;
 import com.mokoko.exceptions.ClienteByIdNotFoundException;
+import com.mokoko.exceptions.ClienteEmailAlreadyInUse;
 import com.mokoko.exceptions.InvalidCredentialsException;
 import com.mokoko.repositories.ClienteRepository;
 
@@ -16,6 +20,9 @@ public class ClienteService {
 	
 	@Autowired
 	private ClienteRepository clienteRepo;
+	
+	 @Autowired
+	 private BCryptPasswordEncoder passwordEncoder;
 	
 	public List<Cliente> getAllClienti(){
 		return clienteRepo.findAll();
@@ -47,19 +54,47 @@ public class ClienteService {
 			
 		existingCliente.setCognome(updatedCliente.getCognome());
 		existingCliente.setNome(updatedCliente.getNome());
-		existingCliente.setTelefono(updatedCliente.getTelefono());
 		existingCliente.setEmail(updatedCliente.getEmail());
 			
 		return clienteRepo.save(existingCliente);				
 	}
 	
 	// Metodi personalizzati
-	 public Cliente login(String email, Long id) {
-	        Optional<Cliente> optCliente = clienteRepo.findByEmailAndId(email, id);
-	        if (optCliente.isEmpty()) {
-	            throw new InvalidCredentialsException(); // Lancia l'eccezione se le credenziali non sono valide
+	
+	
+	public ClienteDTO convertToDTO(Cliente cliente) {
+	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), cliente.getEmail());
+	}
+
+	public ClienteDTO login(String logingEmail, String loginPassword) {
+	    Optional<Cliente> optCliente = clienteRepo.findByEmail(logingEmail);
+	    if (optCliente.isEmpty()) {
+	        throw new InvalidCredentialsException(); 
 	    }
-	    return optCliente.get();
-	 }
+	    
+	    Cliente cliente = optCliente.get();
+	    // Verifica la password
+	    if (!passwordEncoder.matches(loginPassword, cliente.getPassword())) {
+	        throw new InvalidCredentialsException();
+	    }
+	    return convertToDTO(cliente);
+	}
+	 
+	public ClienteDTO register(RegisterDTO registerDTO) {
+        Optional<Cliente> optCliente = clienteRepo.findByEmail(registerDTO.getEmail());
+        if (optCliente.isPresent()) {
+            throw new ClienteEmailAlreadyInUse();
+        }
+
+        // Crea un nuovo Cliente e codifica la password
+        Cliente cliente = new Cliente();
+        cliente.setNome(registerDTO.getNome());
+        cliente.setCognome(registerDTO.getCognome());
+        cliente.setEmail(registerDTO.getEmail());
+        cliente.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+
+        // Salva il nuovo Cliente nel database
+        return convertToDTO(clienteRepo.save(cliente));
+    }
 
 }

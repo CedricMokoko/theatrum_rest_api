@@ -11,5 +11,6 @@ import com.mokoko.entities.Cliente;
  * base per le operazioni CRUD.*/
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 	//Qui vanno definiti metodi personalizzati
-	Optional<Cliente> findByEmailAndId(String email, Long id);
+	
+	Optional<Cliente> findByEmail(String email);
 }

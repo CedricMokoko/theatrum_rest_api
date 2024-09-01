@@ -56,6 +56,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
     
+    @ExceptionHandler(ClienteEmailAlreadyInUse.class)
+    public ResponseEntity<String> handleClienteEmailAlreadyInUse(ClienteEmailAlreadyInUse e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+    
     
     
     // Gestione delle eccezioni del modello Biglietto
