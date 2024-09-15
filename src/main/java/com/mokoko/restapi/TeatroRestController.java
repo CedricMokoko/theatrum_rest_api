@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Teatri", description = "Endpoint per la gestione dei teatri.")
 @RestController
 @RequestMapping("/api/teatri")
-@CrossOrigin(origins = "https://locahost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TeatroRestController {
 	
 	@Autowired
