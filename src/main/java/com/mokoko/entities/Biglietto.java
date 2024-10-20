@@ -1,6 +1,6 @@
 package com.mokoko.entities;
 
-import java.util.Date; 
+import java.time.LocalDateTime; 
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,7 +22,7 @@ public class Biglietto {
 	private Long id;
 	
 	@Column(name = "DATA_ORA", nullable = false)
-	private Date dataOra;
+	private LocalDateTime dataOra; 
 	
 	@Column(name = "TIPO_PAGAMENTO", length = 20, nullable = false)
 	private String tipoPagamento;
@@ -43,7 +44,7 @@ public class Biglietto {
 		super();
 	}
 
-	public Biglietto(Date dataOra, String tipoPagamento, Integer quantita, Cliente cliente, Replica replica) {
+	public Biglietto(LocalDateTime dataOra, String tipoPagamento, Integer quantita, Cliente cliente, Replica replica) {
 		super();
 		this.dataOra = dataOra;
 		this.tipoPagamento = tipoPagamento;
@@ -51,6 +52,11 @@ public class Biglietto {
 		this.cliente = cliente;
 		this.replica = replica;
 	}
+	
+	@PrePersist // Questo metodo verrà chiamato prima di salvare l'entità
+    private void onCreate() {
+        this.dataOra = LocalDateTime.now(); // Imposta la data e l'ora correnti
+    }
 
 	public Long getId() {
 		return id;
@@ -60,11 +66,11 @@ public class Biglietto {
 		this.id = id;
 	}
 
-	public Date getDataOra() {
+	public LocalDateTime getDataOra() {
 		return dataOra;
 	}
 
-	public void setDataOra(Date dataOra) {
+	public void setDataOra(LocalDateTime dataOra) {
 		this.dataOra = dataOra;
 	}
 
