@@ -1,6 +1,6 @@
 package com.mokoko.restapi;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +29,12 @@ public class ReplicaRestController {
 		List<Replica> repliche = replicaService.getReplicheBySpettacolo(id);
 		
 		return ResponseEntity.ok(repliche);
+	}
+	
+	@GetMapping("/id/{id}")
+	public ResponseEntity<Replica> getReplicaById(@PathVariable String id){
+		Replica replica = replicaService.getReplicaById(id);
+		 return ResponseEntity.ok(replica);
 	}
 
 }

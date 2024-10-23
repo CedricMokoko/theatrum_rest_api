@@ -1,6 +1,6 @@
 package com.mokoko.services;
 
-import java.util.List;
+import java.util.List; 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.mokoko.entities.Replica;
 import com.mokoko.entities.Spettacolo;
+import com.mokoko.exceptions.ReplicaByIdNotFoundException;
 import com.mokoko.exceptions.SpettacoloByIdNotFoundException;
 import com.mokoko.repositories.ReplicaRepository;
 import com.mokoko.repositories.SpettacoloRepository;
@@ -25,8 +26,12 @@ public class ReplicaService {
 		return replicaRepo.findAll();
 	}
 	
-	public Optional<Replica> getReplicaById(String id){
-		return replicaRepo.findById(id);
+	public Replica getReplicaById(String id){
+		Optional<Replica> optReplica = replicaRepo.findById(id);
+		if(optReplica.isEmpty()) {
+			new ReplicaByIdNotFoundException(id);
+		}
+		return optReplica.get();
 	}
 	
 	public Replica createReplica(Replica replica) {
