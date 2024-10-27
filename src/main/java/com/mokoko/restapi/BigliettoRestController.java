@@ -29,8 +29,9 @@ public class BigliettoRestController {
 	BigliettoService bigliettoService;
 	
 	@PostMapping
-	public Biglietto createBiglietto(@RequestBody Biglietto biglietto) {
-		return bigliettoService.createBiglietto(biglietto);
+	public ResponseEntity<List<Biglietto>> createBiglietto(@RequestBody Biglietto biglietto) {
+		List<Biglietto> bigliettoTocreate = bigliettoService.createBiglietto(biglietto);
+		return ResponseEntity.ok(bigliettoTocreate);
 	}
 	
 	@GetMapping
@@ -47,14 +48,12 @@ public class BigliettoRestController {
 	@GetMapping("/replica/{id}")
 	public ResponseEntity<List<Biglietto>> getBiglettiByReplica(@PathVariable String id){
 		List<Biglietto> biglietti = bigliettoService.getBigliettiByReplica(id);
-		
 		return ResponseEntity.ok(biglietti);
 	}
 	
 	@GetMapping("/cliente/{id}")
 	public ResponseEntity<List<Biglietto>> getBigliettiByCliente(@PathVariable Long id){
 		List<Biglietto> biglietti = bigliettoService.getBigliettiByCliente(id);
-		
 		return ResponseEntity.ok(biglietti);
 	}
 

@@ -1,6 +1,6 @@
 package com.mokoko.entities;
 
-import java.time.LocalDateTime; 
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,8 +17,11 @@ public class Biglietto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "COD_OPERAZIONE", length = 8, nullable = false)
+	@Column(name = "ID", nullable = false)
 	private Long id;
+	
+	@Column(name = "COD_OPERAZIONE", length = 8, nullable = false)
+	private String codOperazione;
 	
 	@Column(name = "DATA_ORA", nullable = false)
 	private LocalDateTime dataOra; 
@@ -44,8 +46,9 @@ public class Biglietto {
 		super();
 	}
 
-	public Biglietto(LocalDateTime dataOra, String tipoPagamento, Integer quantita, Cliente cliente, Replica replica) {
+	public Biglietto(String codOperazione, LocalDateTime dataOra, String tipoPagamento, Integer quantita, Cliente cliente, Replica replica) {
 		super();
+		this.codOperazione = codOperazione;
 		this.dataOra = dataOra;
 		this.tipoPagamento = tipoPagamento;
 		this.quantita = quantita;
@@ -53,11 +56,7 @@ public class Biglietto {
 		this.replica = replica;
 	}
 	
-	@PrePersist // Questo metodo verrà chiamato prima di salvare l'entità
-    private void onCreate() {
-        this.dataOra = LocalDateTime.now(); // Imposta la data e l'ora correnti
-    }
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -106,11 +105,22 @@ public class Biglietto {
 		this.replica = replica;
 	}
 
+
+	public String getCodOperazione() {
+		return codOperazione;
+	}
+
+	public void setCodOperazione(String codOperazione) {
+		this.codOperazione = codOperazione;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Biglietto [id=");
 		builder.append(id);
+		builder.append(", codOperazione=");
+		builder.append(codOperazione);
 		builder.append(", dataOra=");
 		builder.append(dataOra);
 		builder.append(", tipoPagamento=");
@@ -119,9 +129,11 @@ public class Biglietto {
 		builder.append(quantita);
 		builder.append(", cliente=");
 		builder.append(cliente);
-		builder.append(", Replica=");
+		builder.append(", replica=");
 		builder.append(replica);
 		builder.append("]");
 		return builder.toString();
 	}	
+	
+	
 }

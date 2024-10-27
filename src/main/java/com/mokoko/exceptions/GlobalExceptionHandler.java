@@ -68,4 +68,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleBigliettoByIdNotFoundException(BigliettoByIdNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+    
+    @ExceptionHandler(InsufficientSeatsException.class)
+    public ResponseEntity<String> handleInsufficientSeatsException(InsufficientSeatsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
 }

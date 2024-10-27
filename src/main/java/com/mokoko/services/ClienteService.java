@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mokoko.dto.ClienteDTO;
 import com.mokoko.dto.RegisterDTO;
@@ -21,8 +22,8 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepo;
 	
-	 @Autowired
-	 private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public List<Cliente> getAllClienti(){
 		return clienteRepo.findAll();
@@ -36,10 +37,12 @@ public class ClienteService {
 		return optCliente.get();
 	}
 	
+	@Transactional
 	public Cliente createCliente(Cliente cliente) {
 		return clienteRepo.save(cliente);
 	}
 	
+	@Transactional
 	public void deleteCliente(Long id) {
 		Optional<Cliente> clienteToDelete = clienteRepo.findById(id);
 		if(clienteToDelete.isEmpty()){
@@ -48,6 +51,7 @@ public class ClienteService {
 		clienteRepo.delete(clienteToDelete.get());
 	}
 	
+	@Transactional
 	public Cliente updateCliente(Long id, Cliente updatedCliente){		
 		Cliente existingCliente = clienteRepo.findById(id)
 				.orElseThrow(() -> new ClienteByIdNotFoundException(id));
@@ -63,7 +67,7 @@ public class ClienteService {
 	
 	
 	public ClienteDTO convertToDTO(Cliente cliente) {
-	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), cliente.getEmail());
+	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), cliente.getEmail(), cliente.getRuolo());
 	}
 
 	public ClienteDTO login(String logingEmail, String loginPassword) {
@@ -79,7 +83,8 @@ public class ClienteService {
 	    }
 	    return convertToDTO(cliente);
 	}
-	 
+	
+	@Transactional
 	public ClienteDTO register(RegisterDTO registerDTO) {
         Optional<Cliente> optCliente = clienteRepo.findByEmail(registerDTO.getEmail());
         if (optCliente.isPresent()) {

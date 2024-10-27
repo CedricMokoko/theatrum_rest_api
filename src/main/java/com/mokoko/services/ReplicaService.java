@@ -1,10 +1,11 @@
 package com.mokoko.services;
 
-import java.util.List; 
+import java.util.List;  
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mokoko.entities.Replica;
 import com.mokoko.entities.Spettacolo;
@@ -34,14 +35,17 @@ public class ReplicaService {
 		return optReplica.get();
 	}
 	
+	@Transactional
 	public Replica createReplica(Replica replica) {
 		return replicaRepo.save(replica);
 	}
 
+	@Transactional
 	public void deleteReplica(String id) {
 		replicaRepo.deleteById(id);
 	}
 	
+	@Transactional
 	public Optional<Replica> updateReplica(String id, Replica updatedReplica){	
 		return replicaRepo.findById(id).map(existingReplica -> {
 			existingReplica.setData(updatedReplica.getData());

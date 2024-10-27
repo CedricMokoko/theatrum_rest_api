@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mokoko.entities.Teatro;
 import com.mokoko.exceptions.TeatroByIdNotFoundException;
@@ -41,10 +42,12 @@ public class TeatroService {
 		return teatri;
 	}
 	
+	@Transactional
 	public Teatro createTeatro(Teatro teatro) {
 		return teatroRepo.save(teatro);
 	}
 	
+	@Transactional
 	public void deleteTeatro(String id) {
 		  Optional<Teatro> teatroToDelete = teatroRepo.findById(id);
 	       if(teatroToDelete.isEmpty()){
@@ -53,6 +56,7 @@ public class TeatroService {
 	      teatroRepo.delete(teatroToDelete.get());
 	}
 	
+	@Transactional
 	public Teatro updateTeatro(String id, Teatro updatedTeatro) {
 	    Teatro existingTeatro = teatroRepo.findById(id)
 	            .orElseThrow(() -> new TeatroByIdNotFoundException(id));
@@ -64,6 +68,16 @@ public class TeatroService {
 	    existingTeatro.setTelefono(updatedTeatro.getTelefono());
 	    existingTeatro.setPosti(updatedTeatro.getPosti());
 
+	    return teatroRepo.save(existingTeatro);
+	}
+	
+	
+	//Methode pour mettre à jour le nombre de postes disponibles après achat
+	@Transactional
+	public Teatro updateTeatroPostiDisponibili(String id, Teatro updatedTeatro) {
+	    Teatro existingTeatro = teatroRepo.findById(id)
+	            .orElseThrow(() -> new TeatroByIdNotFoundException(id));
+	    existingTeatro.setPostiDisponibili(updatedTeatro.getPostiDisponibili());
 	    return teatroRepo.save(existingTeatro);
 	}
 

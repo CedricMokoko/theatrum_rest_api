@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mokoko.entities.Spettacolo;
 import com.mokoko.entities.Teatro;
 import com.mokoko.exceptions.SpettacoloByIdNotFoundException;
@@ -35,10 +37,12 @@ public class SpettacoloService {
 		return optSpettacolo.get();
 	}
 	
+	@Transactional
 	public Spettacolo createSpettacolo(Spettacolo spettacolo) {
 		return spettacoloRepo.save(spettacolo);
 	}
 	
+	@Transactional
 	public void deleteSpettacolo(String id) {
 		Optional<Spettacolo> spettacoloToDelete = spettacoloRepo.findById(id);
 		if (spettacoloToDelete.isEmpty()) {
@@ -47,6 +51,7 @@ public class SpettacoloService {
 		spettacoloRepo.delete(spettacoloToDelete.get());	
 	}
 	
+	@Transactional
 	public Spettacolo updateSpettacolo(String id, Spettacolo updatedSpettacolo){
 		Spettacolo existingSpettacolo = spettacoloRepo.findById(id)
 				.orElseThrow(() -> new SpettacoloByIdNotFoundException(id));

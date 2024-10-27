@@ -30,12 +30,15 @@ public class Teatro {
 
     @Column(name = "POSTI")
     private Integer posti;
+    
+    @Column(name = "POSTI_DISPONIBILI")
+    private Integer postiDisponibili;
 
 	public Teatro() {
 		super();
 	}
 
-	public Teatro(String nome, String indirizzo, String citta, String provincia, String telefono, Integer posti) {
+	public Teatro(String nome, String indirizzo, String citta, String provincia, String telefono, Integer posti, Integer postiDisponibili) {
 		super();
 		this.nome = nome;
 		this.indirizzo = indirizzo;
@@ -43,6 +46,7 @@ public class Teatro {
 		this.provincia = provincia;
 		this.telefono = telefono;
 		this.posti = posti;
+		this.postiDisponibili = postiDisponibili;
 	}
 
 	public String getId() {
@@ -100,6 +104,14 @@ public class Teatro {
 	public void setPosti(Integer posti) {
 		this.posti = posti;
 	}
+	
+	public Integer getPostiDisponibili() {
+		return postiDisponibili;
+	}
+
+	public void setPostiDisponibili(Integer postiDisponibili) {
+		this.postiDisponibili = postiDisponibili;
+	}
 
 	@Override
 	public String toString() {
@@ -118,9 +130,12 @@ public class Teatro {
 		builder.append(telefono);
 		builder.append(", posti=");
 		builder.append(posti);
+		builder.append(", postiDisponibili=");
+		builder.append(postiDisponibili);
 		builder.append("]");
 		return builder.toString();
 	} 
-    
+
+	
     
 }

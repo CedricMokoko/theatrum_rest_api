@@ -1,16 +1,21 @@
 package com.mokoko.services;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;  
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mokoko.entities.Biglietto;
 import com.mokoko.entities.Cliente;
 import com.mokoko.entities.Replica;
-
+import com.mokoko.entities.Teatro;
 import com.mokoko.exceptions.BigliettoByIdNotFoundException;
 import com.mokoko.exceptions.ClienteByIdNotFoundException;
+import com.mokoko.exceptions.InsufficientSeatsException;
 import com.mokoko.exceptions.ReplicaByIdNotFoundException;
 
 import com.mokoko.repositories.BigliettoRepository;
@@ -34,6 +39,9 @@ public class BigliettoService {
 	@Autowired
 	private ReplicaRepository replicaRepo;
 	
+	@Autowired
+	private TeatroService teatroService;
+	
 	public List<Biglietto> getAllBiglietti(){
 		return bigliettoRepo.findAll();
 	}
@@ -46,10 +54,55 @@ public class BigliettoService {
 	     return optBiglietto.get();	
 	}
 	
-	public Biglietto createBiglietto(Biglietto biglietto) {
-		return bigliettoRepo.save(biglietto);
+	@Transactional // Gestisce la transazione per questa operazione
+	public List<Biglietto> createBiglietto(Biglietto biglietto) {
+	    // Imposta la data e l'ora correnti per tutti i biglietti
+	    biglietto.setDataOra(LocalDateTime.now());
+	    Teatro teatroAssociato = biglietto.getReplica().getSpettacolo().getTeatro();
+	    int postiDisponibili = teatroAssociato.getPostiDisponibili();
+	    int quantitaRichiesta = biglietto.getQuantita();
+	    
+	    // Controlla se ci sono abbastanza posti disponibili
+	    if (postiDisponibili < quantitaRichiesta) {
+	        throw new InsufficientSeatsException(postiDisponibili);
+	    }
+	    
+	 // Ottieni il numero totale di biglietti già presenti nel database
+	    long numeroBigliettiGiaPresenti = bigliettoRepo.count();
+	    
+	    // Lista per memorizzare tutti i biglietti creati
+	    List<Biglietto> bigliettiCreati = new ArrayList<>();
+	    
+	    // Creazione dei biglietti in base alla quantità richiesta
+	    for (int i = 0; i < quantitaRichiesta; i++) {
+	        Biglietto nuovoBiglietto = new Biglietto();
+	        nuovoBiglietto.setDataOra(biglietto.getDataOra());
+	        nuovoBiglietto.setTipoPagamento(biglietto.getTipoPagamento());
+	        nuovoBiglietto.setQuantita(1); // Ogni biglietto rappresenta un singolo posto
+	        nuovoBiglietto.setReplica(biglietto.getReplica());
+	        nuovoBiglietto.setCliente(biglietto.getCliente());
+	        
+	     // Genera il numero del biglietto basato sul numero totale di biglietti già presenti
+	        setNumeroBiglietto(nuovoBiglietto, teatroAssociato, numeroBigliettiGiaPresenti + i); // Passa il conteggio dei biglietti già presenti
+	        
+	        
+	        // Salva il biglietto nel repository
+	        Biglietto bigliettoSalvato = bigliettoRepo.save(nuovoBiglietto);
+	        bigliettiCreati.add(bigliettoSalvato);
+	        
+	        // Decrementa i posti disponibili
+	        postiDisponibili--;
+	        teatroAssociato.setPostiDisponibili(postiDisponibili);
+	    }
+	    
+	    // Aggiorna il teatro per riflettere i posti disponibili aggiornati
+	    teatroService.updateTeatroPostiDisponibili(teatroAssociato.getId(), teatroAssociato);
+	    
+	    return bigliettiCreati;
 	}
+
 	
+	@Transactional
 	public void deleteBiglietto(Long id) {
 		Optional<Biglietto> bigliettoToDelete = bigliettoRepo.findById(id);
 		if(bigliettoToDelete.isEmpty()){
@@ -58,6 +111,7 @@ public class BigliettoService {
 		bigliettoRepo.delete(bigliettoToDelete.get());
 	}
 	
+	@Transactional
 	public Biglietto updateBiglietto(Long id, Biglietto updatedBiglietto) {
         Biglietto existingBiglietto = bigliettoRepo.findById(id)
         		.orElseThrow(() -> new BigliettoByIdNotFoundException(id));
@@ -87,6 +141,23 @@ public class BigliettoService {
 		
 		return bigliettoRepo.findByCliente(cliente);
 	}
+	
+	@Transactional
+	private void setNumeroBiglietto(Biglietto biglietto, Teatro teatro, long numeroBigliettiGiaPresenti) {
+       
+        Integer bigliettiVenduti = (int) numeroBigliettiGiaPresenti; // Calcola i biglietti già venduti
+        
+        // Calcola la lunghezza del numero del biglietto
+        String formato = "%0" + teatro.getPosti().toString().length() + "d"; 
+        
+        // Incrementa il contatore dei biglietti venduti e formatta il numero
+        String numeroBigliettoFormatted = String.format(formato, bigliettiVenduti + 1); // Assegna il numero formattato
+       
+     
+      
+        // Incrementa il contatore dei biglietti venduti e formatta il numero
+        biglietto.setCodOperazione(numeroBigliettoFormatted); // Assegna il numero formattato
+    }
 	
 	 
 }

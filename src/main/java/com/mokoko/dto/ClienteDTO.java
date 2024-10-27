@@ -5,12 +5,14 @@ public class ClienteDTO {
     private String cognome;
     private String nome;
     private String email;
+    private String ruolo;
 
-    public ClienteDTO(Long id, String cognome, String nome, String email) {
+    public ClienteDTO(Long id, String cognome, String nome, String email, String ruolo) {
         this.id = id;
         this.cognome = cognome;
         this.nome = nome;
         this.email = email;
+        this.ruolo = ruolo;
     }
 
     public Long getId() {
@@ -44,4 +46,14 @@ public class ClienteDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getRuolo() {
+		return ruolo;
+	}
+
+	public void setRuolo(String ruolo) {
+		this.ruolo = ruolo;
+	}
+    
+    
 }
