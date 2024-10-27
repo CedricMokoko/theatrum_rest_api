@@ -67,8 +67,8 @@ public class BigliettoService {
 	        throw new InsufficientSeatsException(postiDisponibili);
 	    }
 	    
-	 // Ottieni il numero totale di biglietti già presenti nel database
-	    long numeroBigliettiGiaPresenti = bigliettoRepo.count();
+	    // Ottieni il numero di biglietti già presenti per la replica specificata
+	    long numeroBigliettiGiaPresenti = bigliettoRepo.countByReplica(biglietto.getReplica());
 	    
 	    // Lista per memorizzare tutti i biglietti creati
 	    List<Biglietto> bigliettiCreati = new ArrayList<>();

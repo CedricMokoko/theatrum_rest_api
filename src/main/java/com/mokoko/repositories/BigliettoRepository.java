@@ -20,5 +20,8 @@ public interface BigliettoRepository extends JpaRepository<Biglietto, Long> {
 	
 	// Metodo per contare tutti i biglietti
     long count();
+    
+ // Metodo per contare i biglietti per una specifica replica
+    long countByReplica(Replica replica);
 	
 }
