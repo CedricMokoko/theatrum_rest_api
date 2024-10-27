@@ -70,7 +70,7 @@ public class ClienteService {
 	public ClienteDTO convertToDTO(Cliente cliente) {
 		// maskingEmail permette di nascondere alcune lettere dell'email prima di rimandarla al front-end
 		String maskedEmail = EmailMaskingUtil.maskEmail(cliente.getEmail());
-	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), maskedEmail, cliente.getRuolo());
+	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), cliente.getRuolo(), maskedEmail, cliente.getImagePath());
 	}
 	
 	public ClienteDTO login(String logingEmail, String loginPassword) {

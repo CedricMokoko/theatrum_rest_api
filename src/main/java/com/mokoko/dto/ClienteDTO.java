@@ -4,21 +4,24 @@ public class ClienteDTO {
     private Long id;
     private String cognome;
     private String nome;
-    private String email;
     private String ruolo;
+    private String email;
+    private String imagePath;
 
     
     public ClienteDTO() {}
-    
-    public ClienteDTO(Long id, String cognome, String nome, String email, String ruolo) {
-        this.id = id;
-        this.cognome = cognome;
-        this.nome = nome;
-        this.email = email;
-        this.ruolo = ruolo;
-    }
 
-    public Long getId() {
+    public ClienteDTO(Long id,String cognome, String nome, String ruolo, String email, String imagePath) {
+		super();
+		this.id = id;
+		this.cognome = cognome;
+		this.nome = nome;
+		this.ruolo = ruolo;
+		this.email = email;
+		this.imagePath = imagePath;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -42,6 +45,14 @@ public class ClienteDTO {
         this.nome = nome;
     }
 
+    public String getRuolo() {
+		return ruolo;
+	}
+
+	public void setRuolo(String ruolo) {
+		this.ruolo = ruolo;
+	}
+	
     public String getEmail() {
         return email;
     }
@@ -50,12 +61,12 @@ public class ClienteDTO {
         this.email = email;
     }
 
-	public String getRuolo() {
-		return ruolo;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	public void setRuolo(String ruolo) {
-		this.ruolo = ruolo;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	@Override
@@ -67,12 +78,13 @@ public class ClienteDTO {
 		builder.append(cognome);
 		builder.append(", nome=");
 		builder.append(nome);
-		builder.append(", email=");
-		builder.append(email);
 		builder.append(", ruolo=");
 		builder.append(ruolo);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", imagePath=");
+		builder.append(imagePath);
 		builder.append("]");
 		return builder.toString();
 	}
-    
 }

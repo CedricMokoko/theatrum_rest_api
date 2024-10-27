@@ -1,12 +1,16 @@
 package com.mokoko.entities;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,21 +33,32 @@ public class Spettacolo {
 	@Column(name = "PREZZO", nullable = false, precision = 6, scale = 2)
 	private BigDecimal prezzo; // Precisione totale: 6, Scala: 2
 	 
+	@Column(name = "IMAGE_PATH", length = 255, nullable = true) // Ajout du champ pour l'image
+	private String imagePath; // Champ pour stocker le chemin de l'image
+
 	@ManyToOne
 	@JoinColumn(name = "COD_TEATRO", nullable = false)
 	private Teatro teatro;
+	
+	 @OneToMany(mappedBy = "COD_SPETTACOLO", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	 private List<Rating> ratings;
+
 
 	public Spettacolo() {
 		super();
 	}
-	
-	public Spettacolo(String titolo, String autore, String regista, BigDecimal prezzo, Teatro teatro) {
+
+
+	public Spettacolo(String titolo, String autore, String regista, BigDecimal prezzo, String imagePath, Teatro teatro,
+			List<Rating> ratings) {
 		super();
 		this.titolo = titolo;
 		this.autore = autore;
 		this.regista = regista;
 		this.prezzo = prezzo;
+		this.imagePath = imagePath;
 		this.teatro = teatro;
+		this.ratings = ratings;
 	}
 
 	public String getId() {
@@ -86,6 +101,14 @@ public class Spettacolo {
 		this.prezzo = prezzo;
 	}
 
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
 	public Teatro getTeatro() {
 		return teatro;
 	}
@@ -94,22 +117,12 @@ public class Spettacolo {
 		this.teatro = teatro;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Spettacolo [id=");
-		builder.append(id);
-		builder.append(", titolo=");
-		builder.append(titolo);
-		builder.append(", autore=");
-		builder.append(autore);
-		builder.append(", regista=");
-		builder.append(regista);
-		builder.append(", prezzo=");
-		builder.append(prezzo);
-		builder.append(", teatro=");
-		builder.append(teatro);
-		builder.append("]");
-		return builder.toString();
+	public List<Rating> getRatings() {
+		return ratings;
 	}
+
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+
 }

@@ -1,8 +1,15 @@
 package com.mokoko.entities;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,10 +24,7 @@ public class Teatro {
     private String nome; 
     
     @Column(name = "INDIRIZZO", length = 30, nullable = false)
-    private String indirizzo; 
-
-    @Column(name = "CITTA", length = 25, nullable = false)
-    private String citta; 
+    private String indirizzo;  
 
     @Column(name = "PROVINCIA", length = 2, nullable = false)
     private String provincia; 
@@ -31,19 +35,32 @@ public class Teatro {
     @Column(name = "POSTI")
     private Integer posti;
     
+    @Column(name = "IMAGE_PATH", length = 255, nullable = true) // Ajout du champ pour l'image
+	private String imagePath; // Champ pour stocker le chemin de l'image
 
+    
+    @OneToMany(mappedBy = "COD_TEATRO", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rating> ratings;
+    
+    @ManyToOne
+	@JoinColumn(name = "COD_CITTA", nullable = false)
+	private Citta citta;
+    
 	public Teatro() {
 		super();
 	}
 
-	public Teatro(String nome, String indirizzo, String citta, String provincia, String telefono, Integer posti) {
+	public Teatro(String nome, String indirizzo, String provincia, String telefono, Integer posti, String imagePath,
+			List<Rating> ratings, Citta citta) {
 		super();
 		this.nome = nome;
 		this.indirizzo = indirizzo;
-		this.citta = citta;
 		this.provincia = provincia;
 		this.telefono = telefono;
 		this.posti = posti;
+		this.imagePath = imagePath;
+		this.ratings = ratings;
+		this.citta = citta;
 	}
 
 	public String getId() {
@@ -70,14 +87,6 @@ public class Teatro {
 		this.indirizzo = indirizzo;
 	}
 
-	public String getCitta() {
-		return citta;
-	}
-
-	public void setCitta(String citta) {
-		this.citta = citta;
-	}
-
 	public String getProvincia() {
 		return provincia;
 	}
@@ -102,6 +111,30 @@ public class Teatro {
 		this.posti = posti;
 	}
 
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public Citta getCitta() {
+		return citta;
+	}
+
+	public void setCitta(Citta citta) {
+		this.citta = citta;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -111,15 +144,20 @@ public class Teatro {
 		builder.append(nome);
 		builder.append(", indirizzo=");
 		builder.append(indirizzo);
-		builder.append(", citta=");
-		builder.append(citta);
 		builder.append(", provincia=");
 		builder.append(provincia);
 		builder.append(", telefono=");
 		builder.append(telefono);
 		builder.append(", posti=");
 		builder.append(posti);
+		builder.append(", imagePath=");
+		builder.append(imagePath);
+		builder.append(", ratings=");
+		builder.append(ratings);
+		builder.append(", citta=");
+		builder.append(citta);
 		builder.append("]");
 		return builder.toString();
-	}   
+	}
+
 }

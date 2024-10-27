@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "clienti")
 public class Cliente {
 	
-	@Id //per segnare quest'attributo come chiave primaria
+	@Id // pour marquer cet attribut comme clé primaire
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
@@ -30,18 +30,22 @@ public class Cliente {
 	
 	@Column(name = "PASSWORD", length = 60, nullable = false)
 	private String password;
-	
+
+	@Column(name = "IMAGE_PATH", length = 255, nullable = true) // Ajout du champ pour l'image
+	private String imagePath; // Champ pour stocker le chemin de l'image
+
 	public Cliente() {
 		super();
 	}
 
-	public Cliente(String cognome, String nome, String email, String password, String ruolo) {
+	public Cliente(String cognome, String nome, String ruolo, String email, String password, String imagePath) {
 		super();
 		this.cognome = cognome;
 		this.nome = nome;
+		this.ruolo = ruolo;
 		this.email = email;
 		this.password = password;
-		this.ruolo = ruolo;
+		this.imagePath = imagePath;
 	}
 
 	public Long getId() {
@@ -68,6 +72,14 @@ public class Cliente {
 		this.nome = nome;
 	}
 
+	public String getRuolo() {
+		return ruolo;
+	}
+
+	public void setRuolo(String ruolo) {
+		this.ruolo = ruolo;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -75,21 +87,21 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getPassword() {
-	        return password;
+		return password;
 	}
 
-    public void setPassword(String password) {
-        this.password = password; 
-    }
-    
-    public String getRuolo() {
-		return ruolo;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public void setRuolo(String ruolo) {
-		this.ruolo = ruolo;
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	@Override
@@ -107,6 +119,8 @@ public class Cliente {
 		builder.append(email);
 		builder.append(", password=");
 		builder.append(password);
+		builder.append(", imagePath=");
+		builder.append(imagePath);
 		builder.append("]");
 		return builder.toString();
 	}

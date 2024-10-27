@@ -14,7 +14,21 @@ public class GlobalExceptionHandler {
 	 * NOT_FOUND -> 404
 	 * UNAUTHORIZED -> 401
 	 * */
+	
+	// Gestione delle eccezioni del modello Citta
+	
+    @ExceptionHandler(CittaByNameNotFoundException.class)
+    public ResponseEntity<String> handleCittaByNameNotFoundException(CittaByNameNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+    
+    @ExceptionHandler(CittaByIdNotFoundException.class)
+    public ResponseEntity<String> handleCittaByIdNotFoundException(CittaByIdNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 
+    
+    
 	// Gestione delle eccezioni del modello Teatro
 	
     @ExceptionHandler(TeatroByNameNotFoundException.class)
