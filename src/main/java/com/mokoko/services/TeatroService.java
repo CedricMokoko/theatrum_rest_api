@@ -71,14 +71,4 @@ public class TeatroService {
 	    return teatroRepo.save(existingTeatro);
 	}
 	
-	
-	//Methode pour mettre à jour le nombre de postes disponibles après achat
-	@Transactional
-	public Teatro updateTeatroPostiDisponibili(String id, Teatro updatedTeatro) {
-	    Teatro existingTeatro = teatroRepo.findById(id)
-	            .orElseThrow(() -> new TeatroByIdNotFoundException(id));
-	    existingTeatro.setPostiDisponibili(updatedTeatro.getPostiDisponibili());
-	    return teatroRepo.save(existingTeatro);
-	}
-
 }

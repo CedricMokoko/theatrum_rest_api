@@ -20,6 +20,9 @@ public class Replica {
 	@Column(name = "DATA_REPLICA", nullable = false)
 	private Date data;
 	
+	@Column(name = "POSTI_DISPONIBILI")
+    private Integer postiDisponibili;
+	
 	@ManyToOne
 	@JoinColumn(name = "COD_SPETTACOLO", nullable = false)
 	private Spettacolo spettacolo;
@@ -28,10 +31,12 @@ public class Replica {
 		super();
 	}
 
-	public Replica(Date data, Spettacolo spettacolo) {
+	public Replica(Date data, Integer postiDisponibili, Spettacolo spettacolo) {
 		super();
 		this.data = data;
+		this.postiDisponibili = postiDisponibili;
 		this.spettacolo = spettacolo;
+		
 	}
 
 	public String getId() {
@@ -57,6 +62,14 @@ public class Replica {
 	public void setSpettacolo(Spettacolo spettacolo) {
 		this.spettacolo = spettacolo;
 	}
+	
+	public Integer getPostiDisponibili() {
+		return postiDisponibili;
+	}
+
+	public void setPostiDisponibili(Integer postiDisponibili) {
+		this.postiDisponibili = postiDisponibili;
+	}
 
 	@Override
 	public String toString() {
@@ -65,6 +78,8 @@ public class Replica {
 		builder.append(id);
 		builder.append(", data=");
 		builder.append(data);
+		builder.append(", postiDisponibili=");
+		builder.append(postiDisponibili);
 		builder.append(", spettacolo=");
 		builder.append(spettacolo);
 		builder.append("]");

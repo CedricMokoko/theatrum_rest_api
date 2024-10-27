@@ -40,7 +40,7 @@ public class BigliettoService {
 	private ReplicaRepository replicaRepo;
 	
 	@Autowired
-	private TeatroService teatroService;
+	private ReplicaService replicaService;
 	
 	public List<Biglietto> getAllBiglietti(){
 		return bigliettoRepo.findAll();
@@ -59,7 +59,7 @@ public class BigliettoService {
 	    // Imposta la data e l'ora correnti per tutti i biglietti
 	    biglietto.setDataOra(LocalDateTime.now());
 	    Teatro teatroAssociato = biglietto.getReplica().getSpettacolo().getTeatro();
-	    int postiDisponibili = teatroAssociato.getPostiDisponibili();
+	    int postiDisponibili = biglietto.getReplica().getPostiDisponibili();
 	    int quantitaRichiesta = biglietto.getQuantita();
 	    
 	    // Controlla se ci sono abbastanza posti disponibili
@@ -92,11 +92,11 @@ public class BigliettoService {
 	        
 	        // Decrementa i posti disponibili
 	        postiDisponibili--;
-	        teatroAssociato.setPostiDisponibili(postiDisponibili);
+	        biglietto.getReplica().setPostiDisponibili(postiDisponibili);
 	    }
 	    
 	    // Aggiorna il teatro per riflettere i posti disponibili aggiornati
-	    teatroService.updateTeatroPostiDisponibili(teatroAssociato.getId(), teatroAssociato);
+	    replicaService.updateReplicaPostiDisponibili(biglietto.getReplica().getId(), biglietto.getReplica());
 	    
 	    return bigliettiCreati;
 	}
