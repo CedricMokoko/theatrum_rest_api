@@ -15,4 +15,7 @@ public interface SpettacoloRepository extends JpaRepository<Spettacolo, String> 
 	List<Spettacolo> findByTitoloContainingIgnoreCase(String titolo);
 	
 	List<Spettacolo> findByTeatro(Teatro teatro);
+	
+	// Metodo per contare tutti gli spettacoli
+    long count();
 }

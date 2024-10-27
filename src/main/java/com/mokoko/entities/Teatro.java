@@ -121,6 +121,5 @@ public class Teatro {
 		builder.append(posti);
 		builder.append("]");
 		return builder.toString();
-	}
-	   
+	}   
 }

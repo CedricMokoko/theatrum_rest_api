@@ -79,9 +79,6 @@ public class SpettacoloService {
 	public List<Spettacolo> getSpettacoliByTeatro(String id) {
 		Teatro teatro = teatroRepo.findById(id)
 				.orElseThrow(() -> new TeatroByIdNotFoundException(id));
-		
 		return spettacoloRepo.findByTeatro(teatro);				
-    }
-	
-	
+    }	
 }

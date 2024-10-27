@@ -35,8 +35,7 @@ public class Replica {
 		super();
 		this.data = data;
 		this.postiDisponibili = postiDisponibili;
-		this.spettacolo = spettacolo;
-		
+		this.spettacolo = spettacolo;	
 	}
 
 	public String getId() {
@@ -84,7 +83,5 @@ public class Replica {
 		builder.append(spettacolo);
 		builder.append("]");
 		return builder.toString();
-	}
-
-	
+	}	
 }

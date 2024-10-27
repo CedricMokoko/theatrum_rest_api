@@ -13,4 +13,7 @@ public interface TeatroRepository extends JpaRepository<Teatro, String> {
 	//Qui vanno definiti metodi personalizzati
 	
 	List<Teatro> findByNomeContainingIgnoreCase(String nome);
+	
+	// Metodo per contare tutti i teatri
+    long count();
 }

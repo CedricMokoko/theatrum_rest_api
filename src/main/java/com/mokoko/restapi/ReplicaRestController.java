@@ -27,7 +27,6 @@ public class ReplicaRestController {
 	@GetMapping("/spettacolo/{id}")
 	public ResponseEntity<List<Replica>> getReplicheBySpettacolo(@PathVariable String id){
 		List<Replica> repliche = replicaService.getReplicheBySpettacolo(id);
-		
 		return ResponseEntity.ok(repliche);
 	}
 	
@@ -36,5 +35,4 @@ public class ReplicaRestController {
 		Replica replica = replicaService.getReplicaById(id);
 		 return ResponseEntity.ok(replica);
 	}
-
 }

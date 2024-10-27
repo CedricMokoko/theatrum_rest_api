@@ -67,5 +67,4 @@ public class SpettacoloRestController {
 	public void  deleteSpettacoloById(@PathVariable String id){
 		spettacoloService.deleteSpettacolo(id);
 	}
-
 }

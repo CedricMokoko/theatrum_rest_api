@@ -1,6 +1,6 @@
 package com.mokoko.services;
 
-import java.util.List;
+import java.util.List; 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import com.mokoko.exceptions.ClienteByIdNotFoundException;
 import com.mokoko.exceptions.ClienteEmailAlreadyInUse;
 import com.mokoko.exceptions.InvalidCredentialsException;
 import com.mokoko.repositories.ClienteRepository;
+import com.mokoko.utils.EmailMaskingUtil;
 
 @Service
 public class ClienteService {
@@ -63,21 +64,22 @@ public class ClienteService {
 		return clienteRepo.save(existingCliente);				
 	}
 	
+	
 	// Metodi personalizzati
 	
-	
 	public ClienteDTO convertToDTO(Cliente cliente) {
-	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), cliente.getEmail(), cliente.getRuolo());
+		// maskingEmail permette di nascondere alcune lettere dell'email prima di rimandarla al front-end
+		String maskedEmail = EmailMaskingUtil.maskEmail(cliente.getEmail());
+	    return new ClienteDTO(cliente.getId(), cliente.getCognome(), cliente.getNome(), maskedEmail, cliente.getRuolo());
 	}
-
+	
 	public ClienteDTO login(String logingEmail, String loginPassword) {
 	    Optional<Cliente> optCliente = clienteRepo.findByEmail(logingEmail);
 	    if (optCliente.isEmpty()) {
 	        throw new InvalidCredentialsException(); 
-	    }
-	    
+	    } 
 	    Cliente cliente = optCliente.get();
-	    // Verifica la password
+	    // Verifica se la password nel database corrisponde a quella passata digitata nel formulario di Login.
 	    if (!passwordEncoder.matches(loginPassword, cliente.getPassword())) {
 	        throw new InvalidCredentialsException();
 	    }
@@ -90,16 +92,13 @@ public class ClienteService {
         if (optCliente.isPresent()) {
             throw new ClienteEmailAlreadyInUse();
         }
-
         // Crea un nuovo Cliente e codifica la password
         Cliente cliente = new Cliente();
         cliente.setNome(registerDTO.getNome());
         cliente.setCognome(registerDTO.getCognome());
         cliente.setEmail(registerDTO.getEmail());
         cliente.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-
         // Salva il nuovo Cliente nel database
         return convertToDTO(clienteRepo.save(cliente));
     }
-
 }

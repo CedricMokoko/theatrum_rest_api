@@ -6,13 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.mokoko.entities.Replica;
 import com.mokoko.entities.Spettacolo;
-import com.mokoko.entities.Teatro;
 import com.mokoko.exceptions.ReplicaByIdNotFoundException;
 import com.mokoko.exceptions.SpettacoloByIdNotFoundException;
-import com.mokoko.exceptions.TeatroByIdNotFoundException;
 import com.mokoko.repositories.ReplicaRepository;
 import com.mokoko.repositories.SpettacoloRepository;
 
@@ -56,7 +53,9 @@ public class ReplicaService {
 		});
 	}
 	
+	
 	// Metodi personalizzati
+	
 	public List<Replica> getReplicheBySpettacolo(String id){
 		Spettacolo spettacolo = spettacoloRepo.findById(id)
 				.orElseThrow(() -> new SpettacoloByIdNotFoundException(id));

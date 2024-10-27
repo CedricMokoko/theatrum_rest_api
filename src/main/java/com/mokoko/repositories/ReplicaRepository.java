@@ -14,4 +14,7 @@ public interface ReplicaRepository extends JpaRepository<Replica, String> {
 	//Qui vanno definiti metodi personalizzati
 	
 	List<Replica> findBySpettacolo(Spettacolo spettacolo);
+	
+	// Metodo per contare tutte le repliche
+    long count();
 }

@@ -7,6 +7,9 @@ public class ClienteDTO {
     private String email;
     private String ruolo;
 
+    
+    public ClienteDTO() {}
+    
     public ClienteDTO(Long id, String cognome, String nome, String email, String ruolo) {
         this.id = id;
         this.cognome = cognome;
@@ -54,6 +57,22 @@ public class ClienteDTO {
 	public void setRuolo(String ruolo) {
 		this.ruolo = ruolo;
 	}
-    
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ClienteDTO [id=");
+		builder.append(id);
+		builder.append(", cognome=");
+		builder.append(cognome);
+		builder.append(", nome=");
+		builder.append(nome);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", ruolo=");
+		builder.append(ruolo);
+		builder.append("]");
+		return builder.toString();
+	}
     
 }

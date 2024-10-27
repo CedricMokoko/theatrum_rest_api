@@ -60,5 +60,4 @@ public class TeatroRestController {
 	public void  deleteTeatroById(@PathVariable String id){
 		teatroService.deleteTeatro(id);
 	}
-
 }

@@ -48,7 +48,6 @@ public class ClienteRestController {
         return ResponseEntity.ok(nuovoClienteDTO);
     }
     
-	
 	@GetMapping
 	public List<Cliente> getAllClienti(){
 		return clienteService.getAllClienti();

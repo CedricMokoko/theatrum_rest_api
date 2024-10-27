@@ -13,7 +13,7 @@ public class Cliente {
 	
 	@Id //per segnare quest'attributo come chiave primaria
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "ID")
 	private Long id;
 	
 	@Column(name = "COGNOME", length = 20, nullable = false)
@@ -110,5 +110,4 @@ public class Cliente {
 		builder.append("]");
 		return builder.toString();
 	}
-
 }

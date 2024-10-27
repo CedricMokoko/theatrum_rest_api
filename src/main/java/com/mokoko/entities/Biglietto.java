@@ -32,12 +32,12 @@ public class Biglietto {
 	@Column(name = "QUANTITA", nullable = false)
 	private Integer quantita;
 	
-	//Relazione unidirezionale - la classe Biglietto fa  riferimento alla classe Cliente, ma non viceversa.
+	//Relazione unidirezionale - la classe Biglietto fa  riferimento alla classe Cliente, ma non il contrario.
 	@ManyToOne
 	@JoinColumn(name = "COD_CLIENTE", nullable = false)
 	private Cliente cliente;
 	
-	//Relazione unidirezionale - la classe Biglietto fa  riferimento alla classe Replica, ma non viceversa.
+	//Relazione unidirezionale - la classe Biglietto fa  riferimento alla classe Replica, ma non il contrario.
 	@ManyToOne
 	@JoinColumn(name = "COD_REPLICA", nullable = false)
 	private Replica replica;
@@ -133,7 +133,5 @@ public class Biglietto {
 		builder.append(replica);
 		builder.append("]");
 		return builder.toString();
-	}	
-	
-	
+	}		
 }

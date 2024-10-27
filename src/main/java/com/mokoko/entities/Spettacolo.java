@@ -112,7 +112,4 @@ public class Spettacolo {
 		builder.append("]");
 		return builder.toString();
 	}
-	 
-	 
-
 }

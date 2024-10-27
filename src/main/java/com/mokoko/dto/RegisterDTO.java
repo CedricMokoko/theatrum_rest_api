@@ -23,8 +23,7 @@ public class RegisterDTO {
     @Size(min = 8, message = "La password deve avere almeno 8 caratteri")
     private String password;
 
-    public RegisterDTO() {
-    }
+    public RegisterDTO() {}
 
     public RegisterDTO(String cognome, String nome, String email, String password) {
         this.cognome = cognome;

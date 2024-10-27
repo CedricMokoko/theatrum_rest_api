@@ -57,7 +57,6 @@ public class BigliettoRestController {
 		return ResponseEntity.ok(biglietti);
 	}
 
-	
 	 @PutMapping("/id/{id}")
 	 public ResponseEntity<Biglietto> updateBiglietto(@PathVariable Long id, @RequestBody Biglietto biglietto){
 	    Biglietto bigliettoUpdate = bigliettoService.updateBiglietto(id, biglietto);
@@ -68,6 +67,4 @@ public class BigliettoRestController {
 	public void  deleteBigliettoById(@PathVariable Long id){
 		bigliettoService.deleteBiglietto(id);
 	}
-	
-	
 }

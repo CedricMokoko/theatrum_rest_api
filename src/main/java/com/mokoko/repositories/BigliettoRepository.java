@@ -11,6 +11,7 @@ import com.mokoko.entities.Replica;
 /*I repository sono l'interfaccia tra l'applicazione e il database. In Spring, 
  * puoi creare repository estendendo JpaRepository, che fornisce i metodi di 
  * base per le operazioni CRUD.*/
+
 public interface BigliettoRepository extends JpaRepository<Biglietto, Long> {
 	//Qui vanno definiti metodi personalizzati
 	
@@ -21,7 +22,7 @@ public interface BigliettoRepository extends JpaRepository<Biglietto, Long> {
 	// Metodo per contare tutti i biglietti
     long count();
     
- // Metodo per contare i biglietti per una specifica replica
+    // Metodo per contare i biglietti per una specifica replica
     long countByReplica(Replica replica);
 	
 }

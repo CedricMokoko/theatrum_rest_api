@@ -29,11 +29,10 @@ public class TeatroService {
 	         throw new TeatroByIdNotFoundException(id);
 	     }
 	     return optTeatro.get();	
-	 }
+	}
 	
 	public List<Teatro> getTeatroByNome(String nome) {
-		List<Teatro> teatri = teatroRepo.findByNomeContainingIgnoreCase(nome);
-		
+		List<Teatro> teatri = teatroRepo.findByNomeContainingIgnoreCase(nome);	
 	    // Se l'Optional è vuoto, lancia un'eccezione
 		if(teatri.isEmpty()) {
 			throw new TeatroByNameNotFoundException(nome);

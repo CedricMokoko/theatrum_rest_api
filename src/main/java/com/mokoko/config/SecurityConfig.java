@@ -23,7 +23,6 @@ public class SecurityConfig {
             .authorizeHttpRequests((requests) -> requests
                 .anyRequest().permitAll() // Permetti l'accesso a tutte le richieste
             );
-
         return http.build();
     }
 }

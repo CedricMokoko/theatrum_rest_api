@@ -24,8 +24,8 @@ import com.mokoko.repositories.ReplicaRepository;
 
 
 
-/*I service contengono la logica di business dell'applicazione. Qui puoi definire metodi per 
- * gestire le operazioni sui dati, chiamando i metodi del repository.*/
+/*I Services contengono la logica di business dell'applicazione. Qui puoi definire metodi per 
+ * gestire le operazioni sui dati, chiamando i metodi del repository e/o di altri servizi quando serve.*/
 
 @Service
 public class BigliettoService {
@@ -54,11 +54,13 @@ public class BigliettoService {
 	     return optBiglietto.get();	
 	}
 	
-	@Transactional // Gestisce la transazione per questa operazione
+	@Transactional // Gestisce la transazione per questa operazione. Se non va tutto bene il database torna allo stato di prima
 	public List<Biglietto> createBiglietto(Biglietto biglietto) {
 	    // Imposta la data e l'ora correnti per tutti i biglietti
 	    biglietto.setDataOra(LocalDateTime.now());
+	    
 	    Teatro teatroAssociato = biglietto.getReplica().getSpettacolo().getTeatro();
+	    
 	    int postiDisponibili = biglietto.getReplica().getPostiDisponibili();
 	    int quantitaRichiesta = biglietto.getQuantita();
 	    
@@ -75,33 +77,31 @@ public class BigliettoService {
 	    
 	    // Creazione dei biglietti in base alla quantità richiesta
 	    for (int i = 0; i < quantitaRichiesta; i++) {
-	        Biglietto nuovoBiglietto = new Biglietto();
+	        
+	    	Biglietto nuovoBiglietto = new Biglietto();
 	        nuovoBiglietto.setDataOra(biglietto.getDataOra());
 	        nuovoBiglietto.setTipoPagamento(biglietto.getTipoPagamento());
 	        nuovoBiglietto.setQuantita(1); // Ogni biglietto rappresenta un singolo posto
 	        nuovoBiglietto.setReplica(biglietto.getReplica());
 	        nuovoBiglietto.setCliente(biglietto.getCliente());
 	        
-	     // Genera il numero del biglietto basato sul numero totale di biglietti già presenti
-	        setNumeroBiglietto(nuovoBiglietto, teatroAssociato, numeroBigliettiGiaPresenti + i); // Passa il conteggio dei biglietti già presenti
-	        
+	        // Genera il numero del biglietto basato sul numero totale di biglietti già presenti
+	        setCodiceOperazioneBiglietto(nuovoBiglietto, teatroAssociato, numeroBigliettiGiaPresenti + i); 
 	        
 	        // Salva il biglietto nel repository
 	        Biglietto bigliettoSalvato = bigliettoRepo.save(nuovoBiglietto);
-	        bigliettiCreati.add(bigliettoSalvato);
+	        bigliettiCreati.add(bigliettoSalvato); // Add il biglietto salvato nell'Array "bigliettiCreati"
 	        
 	        // Decrementa i posti disponibili
 	        postiDisponibili--;
 	        biglietto.getReplica().setPostiDisponibili(postiDisponibili);
-	    }
-	    
+	    }	    
 	    // Aggiorna il teatro per riflettere i posti disponibili aggiornati
 	    replicaService.updateReplicaPostiDisponibili(biglietto.getReplica().getId(), biglietto.getReplica());
 	    
 	    return bigliettiCreati;
 	}
 
-	
 	@Transactional
 	public void deleteBiglietto(Long id) {
 		Optional<Biglietto> bigliettoToDelete = bigliettoRepo.findById(id);
@@ -126,38 +126,30 @@ public class BigliettoService {
             return bigliettoRepo.save(existingBiglietto); 
     }
 	
+	
 	// Metodi personalizzati
 	
 	public List<Biglietto> getBigliettiByReplica(String id){
 		Replica replica = replicaRepo.findById(id)
 				.orElseThrow(() -> new ReplicaByIdNotFoundException(id));
-		
 		return bigliettoRepo.findByReplica(replica);	
 	}
 	
 	public List<Biglietto> getBigliettiByCliente(Long id){
 		Cliente cliente = clienteRepo.findById(id)
-				.orElseThrow(() -> new ClienteByIdNotFoundException(id));
-		
+				.orElseThrow(() -> new ClienteByIdNotFoundException(id));		
 		return bigliettoRepo.findByCliente(cliente);
 	}
 	
 	@Transactional
-	private void setNumeroBiglietto(Biglietto biglietto, Teatro teatro, long numeroBigliettiGiaPresenti) {
+	private void setCodiceOperazioneBiglietto(Biglietto biglietto, Teatro teatro, long numeroBigliettiGiaPresenti) {
        
-        Integer bigliettiVenduti = (int) numeroBigliettiGiaPresenti; // Calcola i biglietti già venduti
-        
+        int bigliettiVenduti = (int) numeroBigliettiGiaPresenti; // Calcola i biglietti già venduti  
         // Calcola la lunghezza del numero del biglietto
-        String formato = "%0" + teatro.getPosti().toString().length() + "d"; 
-        
+        String formato = "%0" + teatro.getPosti().toString().length() + "d";        
         // Incrementa il contatore dei biglietti venduti e formatta il numero
-        String numeroBigliettoFormatted = String.format(formato, bigliettiVenduti + 1); // Assegna il numero formattato
+        String numeroBigliettoFormatted = String.format(formato, bigliettiVenduti + 1);
        
-     
-      
-        // Incrementa il contatore dei biglietti venduti e formatta il numero
         biglietto.setCodOperazione(numeroBigliettoFormatted); // Assegna il numero formattato
-    }
-	
-	 
+    } 
 }

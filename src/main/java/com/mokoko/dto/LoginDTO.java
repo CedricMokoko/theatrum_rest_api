@@ -15,8 +15,7 @@ public class LoginDTO {
     @Size(min = 8, message = "La password deve avere almeno 6 caratteri")
     private String password;
 
-    public LoginDTO() {
-    }
+    public LoginDTO() {}
 
     public LoginDTO(String email, String password) {
         this.email = email;

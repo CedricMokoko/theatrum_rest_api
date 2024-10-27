@@ -7,6 +7,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	/*
+	 * Tipi di errori ritornati
+	 * 
+	 * NOT_FOUND -> 404
+	 * UNAUTHORIZED -> 401
+	 * */
 
 	// Gestione delle eccezioni del modello Teatro
 	
@@ -46,6 +53,7 @@ public class GlobalExceptionHandler {
     
     
     // Gestione delle eccezioni del modello Cliente
+    
     @ExceptionHandler(ClienteByIdNotFoundException.class)
     public ResponseEntity<String> handleClienteloByIdNotFoundException(ClienteByIdNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -64,6 +72,7 @@ public class GlobalExceptionHandler {
     
     
     // Gestione delle eccezioni del modello Biglietto
+    
     @ExceptionHandler(BigliettoByIdNotFoundException.class)
     public ResponseEntity<String> handleBigliettoByIdNotFoundException(BigliettoByIdNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
