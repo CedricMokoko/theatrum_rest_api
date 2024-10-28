@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class Replica {
 	
 	@Id
-	@Column(name = "COD_REPLICA", length = 4, nullable = false)
+	@Column(name = "COD_REPLICA", length = 6, nullable = false)
 	private String id;
 	
 	@Column(name = "DATA_REPLICA", nullable = false)

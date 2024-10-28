@@ -39,7 +39,7 @@ public class Teatro {
 	private String imagePath; // Champ pour stocker le chemin de l'image
 
     
-    @OneToMany(mappedBy = "COD_TEATRO", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ratedEntityId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rating> ratings;
     
     @ManyToOne

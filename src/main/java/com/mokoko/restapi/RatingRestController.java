@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,18 +26,29 @@ public class RatingRestController {
     private RatingService ratingService;
 
     @PostMapping
-    public ResponseEntity<Rating> addRating(@RequestParam Long clientId,
+    public ResponseEntity<Rating> addOrUpdateRating(@RequestParam Long clientId,
                                               @RequestParam String entityId,
                                               @RequestParam RatedEntityType type,
                                               @RequestParam Integer valoreRating) {
-        Rating rating = ratingService.addRating(clientId, entityId, type, valoreRating);
+        Rating rating = ratingService.addOrUpdateRating(clientId, entityId, type, valoreRating);
         return ResponseEntity.ok(rating);
     }
 
-    @GetMapping("/media")
-    public ResponseEntity<Double> getAverageRating(@RequestParam String entityId,
-                                                @RequestParam RatedEntityType type) {
-        Double media = ratingService.getAverageRating(entityId, type);
+    @GetMapping("/media/{id}")
+    public ResponseEntity<Double> getAverageRating(
+            @PathVariable("id") String entityId,
+            @RequestParam(required = false) RatedEntityType type) {
+        Double media;
+        
+        if (type != null) {
+            // Filtra per ID e tipo
+            media = ratingService.getAverageRating(entityId, type);
+        } else {
+            // Filtra solo per ID
+            media = ratingService.getAverageRating(entityId);
+        }
+        
         return ResponseEntity.ok(media);
     }
+
 }

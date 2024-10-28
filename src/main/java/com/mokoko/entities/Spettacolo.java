@@ -40,7 +40,7 @@ public class Spettacolo {
 	@JoinColumn(name = "COD_TEATRO", nullable = false)
 	private Teatro teatro;
 	
-	 @OneToMany(mappedBy = "COD_SPETTACOLO", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	 @OneToMany(mappedBy = "ratedEntityId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	 private List<Rating> ratings;
 
 

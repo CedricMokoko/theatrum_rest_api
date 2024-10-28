@@ -1,12 +1,10 @@
 package com.mokoko.services;
-
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mokoko.entities.Cliente;
-
 import com.mokoko.entities.Rating;
 import com.mokoko.enums.RatedEntityType;
 import com.mokoko.exceptions.ClienteByIdNotFoundException;
@@ -20,28 +18,33 @@ public class RatingService {
     private RatingRepository ratingRepository;
 
     @Autowired
-    private ClienteRepository clienteRepository; // Add a repository for Cliente
+    private ClienteRepository clienteRepository;
 
-    public Rating addRating(Long clientId, String entityId, RatedEntityType type, Integer ratingValue) {
-        // Fetch the Cliente by its ID
-        Cliente cliente = clienteRepository.findById(clientId)
-            .orElseThrow(() -> new ClienteByIdNotFoundException(clientId));
+    public Rating addOrUpdateRating(Long clientId, String entityId, RatedEntityType type, Integer ratingValue) {
+        // Controlla se esiste una valutazione per lo stesso cliente e teatro
+        Rating rating = ratingRepository.findByClienteIdAndRatedEntityId(clientId, entityId)
+            .orElseGet(() -> {
+                // Se non esiste, crea una nuova valutazione
+                Cliente cliente = clienteRepository.findById(clientId)
+                    .orElseThrow(() -> new ClienteByIdNotFoundException(clientId));
+                Rating newRating = new Rating();
+                newRating.setCliente(cliente);
+                newRating.setRatedEntityId(entityId);
+                newRating.setRatedEntityType(type);
+                return newRating;
+            });
 
-        Rating rating = new Rating();
-        rating.setCliente(cliente); // Set the fetched Cliente
-        rating.setRatedEntityId(entityId);
-        rating.setRatedEntityType(type);
+        // Aggiorna il valore della valutazione (sia per nuove che esistenti)
         rating.setRatingValue(ratingValue);
-        rating.setCreatedAt(LocalDateTime.now()); // You might want to set the createdAt field too
-
+        rating.setCreatedAt(LocalDateTime.now());
         return ratingRepository.save(rating);
     }
 
-    public Double getAverageRating(String entityId, RatedEntityType type) {
-        return ratingRepository.findAverageRatingByEntityIdAndType(entityId, type);
+    public Double getAverageRating(String entityId) {
+        return ratingRepository.findAverageRatingByRatedEntityId(entityId);
     }
-
-
-    // Altri metodi per aggiornare o eliminare rating
+    
+    public Double getAverageRating(String entityId, RatedEntityType type) {
+        return ratingRepository.findAverageRatingByRatedEntityIdAndRatedEntityType(entityId, type);
+    }
 }
-

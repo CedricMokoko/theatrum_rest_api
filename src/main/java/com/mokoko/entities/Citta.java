@@ -27,7 +27,7 @@ public class Citta {
     @Column(name = "IMAGE_URL", length = 255, nullable = true)
     private String imageUrl;
     
-    @OneToMany(mappedBy = "COD_CITTA", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ratedEntityId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rating> ratings;
 
     public Citta() {
